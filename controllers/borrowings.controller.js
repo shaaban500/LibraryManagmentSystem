@@ -5,25 +5,38 @@ const borrowerService = require('../services/borrowings.service');
 
 
 router.post('/borrowings/checkout', async (req, res) => {
-    console.log(req.body)
     const { bookId, borrowerId, checkoutDate, dueDate } = req.body;
-    const result = await borrowerService.checkoutBook(bookId, borrowerId, checkoutDate, dueDate);
-        console.log(result)
-    if(result.res == 1)
-        res.status(200).json('book borrowed successfully..');
-    else 
+    
+    try {
+        const result = await borrowerService.checkoutBook(bookId, borrowerId, checkoutDate, dueDate);
+        res.status(200).json('Book borrowed successfully');
+    } 
+    catch (error) {
         res.status(200).json('No available quantity of this book');
+    }
 });
 
 
 router.post('/borrowings/return', async (req, res) => {
-    console.log(req.body)
     const { bookId, returnDate } = req.body;
-    const result = await borrowerService.returnBook(bookId, returnDate);
-        console.log(result)
-    if(result.res == 1)
+    
+    try {
+        const result = await borrowerService.returnBook(bookId, returnDate);
         res.status(200).json('book returned successfully..');
+    } 
+    catch (error) {
+        res.status(500).json('Somthing went wrong!!');
+    }
 });
 
+
+router.get('/borrowings/:id', async (req, res) => {
+    const books = await borrowerService.getBorrowedBooksByUserId(req.params.id);
+    
+    if (books.length > 0) 
+        res.status(200).json(books);
+    else
+        res.status(404).json('No books found!!');
+});
 
 module.exports = router;
