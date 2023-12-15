@@ -11,8 +11,9 @@ module.exports.checkoutBook = async (bookId, borrowerId, checkoutDate, dueDate) 
 module.exports.returnBook = async (bookId, returnDate) => {
     const returnProcedure = 'CALL ReturnBook(?, ?)';
     const returnParams = [bookId, returnDate];
+    console.log({bookId, returnDate})
     const result = await db.query(returnProcedure, returnParams);
-    console.log(1111)
+    console.log(222)
     return result;
 };
  

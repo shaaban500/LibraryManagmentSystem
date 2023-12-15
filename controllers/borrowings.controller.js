@@ -25,7 +25,7 @@ router.post('/borrowings/return', async (req, res) => {
         res.status(200).json('book returned successfully..');
     } 
     catch (error) {
-        res.status(500).json('Somthing went wrong!!');
+        res.status(500).json('Somthing went wrong!!!');
     }
 });
 
