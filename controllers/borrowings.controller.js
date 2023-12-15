@@ -39,4 +39,15 @@ router.get('/borrowings/:id', async (req, res) => {
         res.status(404).json('No books found!!');
 });
 
+
+router.post('/borrowings/overdue', async (req, res) => {
+    const overDueBooks = await borrowerService.getOverDueBooks(req.body.overDueDate);
+
+    if (overDueBooks.length > 0) 
+        res.status(200).json(overDueBooks);
+    else
+        res.status(404).json('No books found!!!');
+});
+
+
 module.exports = router;

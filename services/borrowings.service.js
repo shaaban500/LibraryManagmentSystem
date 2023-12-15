@@ -7,6 +7,7 @@ module.exports.checkoutBook = async (bookId, borrowerId, checkoutDate, dueDate) 
     return result;
 };
 
+
 module.exports.returnBook = async (bookId, returnDate) => {
     const returnProcedure = 'CALL ReturnBook(?, ?)';
     const returnParams = [bookId, returnDate];
@@ -24,7 +25,18 @@ module.exports.getBorrowedBooksByUserId = async (borrowerId) => {
     `;
 
     const [borrowedBooks] = await db.query(query, [borrowerId]);
-    return borrowedBooks;
+    return [borrowedBooks];
 };
 
 
+module.exports.getOverDueBooks = async (overDueDate) => {
+    const query = `
+        SELECT *
+        FROM books bk
+        JOIN borrowings bw
+        WHERE bk.Id = bw.book_id AND is_returned = FALSE AND due_date < ?;
+    `;
+    console.log(overDueDate)
+    const [overDueBooks] = await db.query(query, [overDueDate]); // Assuming overDueDate is in a compatible format
+    return [overDueBooks];
+};
